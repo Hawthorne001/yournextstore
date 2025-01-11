@@ -1,6 +1,6 @@
-import type { Config } from "tailwindcss";
 import FormsPlugin from "@tailwindcss/forms";
 import TypographyPlugin from "@tailwindcss/typography";
+import type { Config } from "tailwindcss";
 import Animate from "tailwindcss-animate";
 
 const config = {
@@ -72,6 +72,7 @@ const config = {
 			},
 			screens: {
 				xs: "400px",
+				smb: "720px",
 			},
 		},
 	},

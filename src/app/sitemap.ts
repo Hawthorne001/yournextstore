@@ -1,7 +1,7 @@
-import { type MetadataRoute } from "next";
-import * as Commerce from "commerce-kit";
 import { publicUrl } from "@/env.mjs";
-import { Categories } from "@/ui/nav/Nav";
+import StoreConfig from "@/store.config";
+import * as Commerce from "commerce-kit";
+import type { MetadataRoute } from "next";
 
 type Item = MetadataRoute.Sitemap[number];
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			}) satisfies Item,
 	);
 
-	const categoryUrls = Categories.map(
+	const categoryUrls = StoreConfig.categories.map(
 		(category) =>
 			({
 				url: `${publicUrl}/category/${category.slug}`,
