@@ -4,17 +4,27 @@
 	"tailwindCSS.experimental.classRegex": [
 		["(?:twMerge|twJoin|cva|cn|clsx)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]"]
 	],
-	"tailwindCSS.classAttributes": ["className", "tw", "class"],
+	"tailwindCSS.classAttributes": ["className", "tw", "class", "cn"],
 	"typescript.preferences.importModuleSpecifier": "non-relative",
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "biomejs.biome",
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always"
+		"source.fixAll.biome": "always"
 	},
 	"editor.quickSuggestions": {
 		"strings": true
+	},
+	"terminal.integrated.defaultProfile.windows": "PowerShell",
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
 	}
 }

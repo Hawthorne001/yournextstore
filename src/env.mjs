@@ -5,7 +5,9 @@ import { z } from "zod";
 
 export const env = createEnv({
 	server: {
-		STRIPE_SECRET_KEY: z.string(),
+		// Can be provided via env or parameters to Commerce Kit, thus optional
+		STRIPE_SECRET_KEY: z.string().optional(),
+		// Required in Commerce Kit
 		STRIPE_CURRENCY: z.string(),
 		STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
@@ -13,16 +15,20 @@ export const env = createEnv({
 			.string()
 			.optional()
 			.transform((str) => !!str),
+
+		TRIEVE_DATASET_ID: z.string().optional(),
+		TRIEVE_API_KEY: z.string().optional(),
 	},
 	client: {
-		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+		// Can be provided via env or parameters to Commerce Kit, thus optional
+		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
 		NEXT_PUBLIC_URL: z.string().url().optional(),
 
 		NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.string().optional(),
 
 		NEXT_PUBLIC_NEWSLETTER_ENDPOINT: z.string().optional(),
 
-		NEXT_PUBLIC_LANGUAGE: z.string().optional().default("en"),
+		NEXT_PUBLIC_LANGUAGE: z.string().optional().default("en-US"),
 	},
 	runtimeEnv: {
 		STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
@@ -35,6 +41,9 @@ export const env = createEnv({
 		NEXT_PUBLIC_NEWSLETTER_ENDPOINT: process.env.NEXT_PUBLIC_NEWSLETTER_ENDPOINT,
 
 		ENABLE_STRIPE_TAX: process.env.ENABLE_STRIPE_TAX,
+
+		TRIEVE_DATASET_ID: process.env.TRIEVE_DATASET_ID,
+		TRIEVE_API_KEY: process.env.TRIEVE_API_KEY,
 
 		NEXT_PUBLIC_LANGUAGE: process.env.NEXT_PUBLIC_LANGUAGE,
 	},
