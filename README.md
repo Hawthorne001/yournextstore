@@ -1,7 +1,15 @@
 # Your Next Store
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore&env=ENABLE_EXPERIMENTAL_COREPACK,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_CURRENCY&envDescription=Read%20more%20about%20required%20env%20variables%20in%20YNS&envLink=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore%2Ftree%2Fupcoming%3Ftab%3Dreadme-ov-file%23add-environmental-variables&project-name=yournextstore&repository-name=yournextstore&demo-title=Your%20Next%20Store&demo-description=A%20Next.js%20boilerplate%20for%20building%20your%20online%20store%20instantly%3A%20simple%2C%20quick%2C%20powerful.&demo-url=https%3A%2F%2Fdemo.yournextstore.com%2F&demo-image=https%3A%2F%2Fyournextstore.com%2Fdemo.png)
-
+<div align="center">
+<table>
+<tr>
+<td>
+	<a href="https://yournextstore.com/discord"><img src="https://img.shields.io/discord/1206629600483082341?style=for-the-badge&logo=discord&logoColor=white&labelColor=%235865F2&color=%23555" alt="Join Discord" /></a>
+</td>
+<td>
+	<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore&env=ENABLE_EXPERIMENTAL_COREPACK,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_CURRENCY&envDescription=Read%20more%20about%20required%20env%20variables%20in%20YNS&envLink=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore%2Ftree%2Fupcoming%3Ftab%3Dreadme-ov-file%23add-environmental-variables&project-name=yournextstore&repository-name=yournextstore&demo-title=Your%20Next%20Store&demo-description=A%20Next.js%20boilerplate%20for%20building%20your%20online%20store%20instantly%3A%20simple%2C%20quick%2C%20powerful.&demo-url=https%3A%2F%2Fdemo.yournextstore.com%2F&demo-image=https%3A%2F%2Fyournextstore.com%2Fdemo.png"><img src="https://vercel.com/button" alt="Deploy with Vercel" /></a>
+</td>
+<td>
 <a href="https://www.producthunt.com/posts/your-next-store?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-your&#0045;next&#0045;store">
 	<picture>
 		<source
@@ -10,12 +18,42 @@
 		/>
 		<img
 			src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=459751&theme=light"
+			height="36"
 			alt="Your&#0032;Next&#0032;Store - E&#0045;Commerce&#0032;with&#0032;Stripe&#0032;as&#0032;the&#0032;backend | Product Hunt"
 		/>
 	</picture>
-</a><br/><br/>
+</a>
+</td>
+</tr>
+</table>
 
 👉 [demo.yournextstore.com](https://demo.yournextstore.com/) 👈
+
+</div>
+
+## Demo
+
+https://github.com/user-attachments/assets/64197310-29bd-4dd3-a736-1494340e20e8
+
+
+## Quick setup on Vercel:
+1. Click here to deploy this repo on [Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore&env=ENABLE_EXPERIMENTAL_COREPACK,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_CURRENCY&envDescription=Read%20more%20about%20required%20env%20variables%20in%20YNS&envLink=https%3A%2F%2Fgithub.com%2Fyournextstore%2Fyournextstore%2Ftree%2Fupcoming%3Ftab%3Dreadme-ov-file%23add-environmental-variables&project-name=yournextstore&repository-name=yournextstore&demo-title=Your%20Next%20Store&demo-description=A%20Next.js%20boilerplate%20for%20building%20your%20online%20store%20instantly%3A%20simple%2C%20quick%2C%20powerful.&demo-url=https%3A%2F%2Fdemo.yournextstore.com%2F&demo-image=https%3A%2F%2Fyournextstore.com%2Fdemo.png)
+2. Create new account on [Stripe](https://dashboard.stripe.com/register)
+
+### Stripe: 
+- Add at least one product in stripe with this two metadata
+	- slug = "your-product-url-name" example hiking-t-shirt
+	- category = "apparel"
+- Get two api keys from your stripe developer [dashboard](https://dashboard.stripe.com/apikeys) 
+	- NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+	- STRIPE_SECRET_KEY
+
+### Vercel: 
+- Add those informations as **Environment Variables** in your project settings 
+	- ENABLE_EXPERIMENTAL_COREPACK = "1"
+	- STRIPE_CURRENCY = "usd" or any other in iso format
+	- NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = from stripe
+	- STRIPE_SECRET_KEY = from stripe
 
 ## Prerequisites
 
@@ -74,8 +112,8 @@ https://github.com/yournextstore/.github/assets/200613/01d27f69-00dc-446e-bc81-5
 - `NEXT_PUBLIC_UMAMI_WEBSITE_ID` – Umami website ID for analytics
 - `NEXT_PUBLIC_NEWSLETTER_ENDPOINT` – **Preview**: The endpoint for the newsletter form in the future. It should accept POST requests with a JSON `{ email: string }` and return JSON `{ status: number }`.
 - `STRIPE_WEBHOOK_SECRET` – **Preview**: Stripe Webhook secret for handling events from Stripe. Read more below.
-- `ENABLE_STRIPE_TAXES` – **Preview**: Set to any value (i.e., `1`) to enable Stripe Tax in YNS. Read more below.
-- `NEXT_PUBLIC_LANGUAGE` - The language of the store.
+- `ENABLE_STRIPE_TAX` – **Preview**: Set to any value (i.e., `1`) to enable Stripe Tax in YNS. Read more below.
+- `NEXT_PUBLIC_LANGUAGE` - The locale of the store (i.e., `en-US`)
 
 ## Run the store
 
@@ -130,7 +168,7 @@ The endpoint for the webhook is `https://{YOUR_DOMAIN}/api/stripe-webhook`. The 
 
 ## Stripe Tax
 
-Your Next Store comes with a preview of Stripe Tax support. To enable it, set the `ENABLE_STRIPE_TAXES` environment variable to any value (i.e., `1`).
+Your Next Store comes with a preview of Stripe Tax support. To enable it, set the `ENABLE_STRIPE_TAX` environment variable to any value (i.e., `1`).
 
 For this feature to work, you must set your Tax settings in Stripe Dashboard: [dashboard.stripe.com/register/tax](https://dashboard.stripe.com/register/tax). When enabled and configured, taxes will be automatically calculated and added to the total price of the product based on:
 
@@ -156,7 +194,12 @@ Description coming soon.
 
 ### Docker
 
-Description coming soon.
+To deploy on Docker, follow these steps:
+
+1. Clone this repository into an empty folder and create the .env file in the repository as described [here](#add-environment-variables).
+2. Set the variable DOCKER=1 in .env
+3. Execute `pnpm run docker:build`.
+4. After that, you can start the container with `pnpm run docker:run`.
 
 ## That's all
 

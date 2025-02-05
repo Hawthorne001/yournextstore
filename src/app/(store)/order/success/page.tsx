@@ -1,16 +1,16 @@
+import { Badge } from "@/components/ui/badge";
+import { getLocale, getTranslations } from "@/i18n/server";
+import { getCartCookieJson } from "@/lib/cart";
+import { findMatchingCountry } from "@/lib/countries";
+import { formatMoney, formatProductName } from "@/lib/utils";
+import { paymentMethods } from "@/ui/checkout/checkout-card";
+import { ClearCookieClientComponent } from "@/ui/checkout/clear-cookie-client-component";
+import { Markdown } from "@/ui/markdown";
+import type { PaymentIntent } from "@stripe/stripe-js";
+import * as Commerce from "commerce-kit";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { type ComponentProps, Fragment } from "react";
-import { type PaymentIntent } from "@stripe/stripe-js";
-import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
-import * as Commerce from "commerce-kit";
-import { Markdown } from "@/ui/Markdown";
-import { findMatchingCountry } from "@/lib/countries";
-import { paymentMethods } from "@/ui/checkout/CheckoutCard";
-import { Badge } from "@/ui/shadcn/badge";
-import { formatMoney, formatProductName } from "@/lib/utils";
-import { getCartCookieJson } from "@/lib/cart";
-import { ClearCookieClientComponent } from "@/ui/checkout/ClearCookieClientComponent";
 
 export const generateMetadata = async (): Promise<Metadata> => {
 	const t = await getTranslations("/order.metadata");
@@ -19,14 +19,13 @@ export const generateMetadata = async (): Promise<Metadata> => {
 	};
 };
 
-export default async function OrderDetailsPage({
-	searchParams,
-}: {
-	searchParams: {
+export default async function OrderDetailsPage(props: {
+	searchParams: Promise<{
 		payment_intent?: string | string[] | undefined | null;
 		payment_intent_client_secret?: string | string[] | undefined | null;
-	};
+	}>;
 }) {
+	const searchParams = await props.searchParams;
 	if (
 		typeof searchParams.payment_intent !== "string" ||
 		typeof searchParams.payment_intent_client_secret !== "string"
@@ -38,9 +37,13 @@ export default async function OrderDetailsPage({
 	if (!order) {
 		return <div>Order not found</div>;
 	}
-	const cookie = getCartCookieJson();
+	const cookie = await getCartCookieJson();
 	const t = await getTranslations("/order.page");
 	const locale = await getLocale();
+
+	const isDigital = (lines: Commerce.Order["lines"]) => {
+		return lines.some(({ product }) => Boolean(product.metadata.digitalAsset));
+	};
 
 	return (
 		<article className="max-w-3xl pb-32">
@@ -59,7 +62,7 @@ export default async function OrderDetailsPage({
 			<ul role="list" className="my-8 divide-y border-y">
 				{order.lines.map((line) => (
 					<li key={line.product.id} className="py-8">
-						<article className="grid grid-cols-[auto,1fr] grid-rows-[repeat(auto,3)] justify-start gap-x-4 sm:gap-x-8">
+						<article className="grid grid-cols-[auto_1fr] grid-rows-[repeat(auto,3)] justify-start gap-x-4 sm:gap-x-8">
 							<h3 className="row-start-1 font-semibold leading-none text-neutral-700">
 								{formatProductName(line.product.name, line.product.metadata.variant)}
 							</h3>
@@ -77,7 +80,7 @@ export default async function OrderDetailsPage({
 								<Markdown source={line.product.description || ""} />
 							</div>
 							<footer className="row-start-3 mt-2 self-end">
-								<dl className="grid grid-cols-[max-content,auto] gap-2 sm:grid-cols-3">
+								<dl className="grid grid-cols-[max-content_auto] gap-2 sm:grid-cols-3">
 									<div className="max-sm:col-span-2 max-sm:grid max-sm:grid-cols-subgrid">
 										<dt className="text-sm font-semibold text-foreground">{t("price")}</dt>
 										<dd className="text-sm text-accent-foreground">
@@ -111,13 +114,13 @@ export default async function OrderDetailsPage({
 				))}
 				{order.shippingRate?.fixed_amount && (
 					<li className="py-8">
-						<article className="grid grid-cols-[auto,1fr] grid-rows-[repeat(auto,3)] justify-start gap-x-4 sm:gap-x-8">
+						<article className="grid grid-cols-[auto_1fr] grid-rows-[repeat(auto,3)] justify-start gap-x-4 sm:gap-x-8">
 							<h3 className="row-start-1 font-semibold leading-none text-neutral-700">
 								{order.shippingRate.display_name}
 							</h3>
 							<div className="col-start-1 row-span-3 row-start-1 mt-0.5 w-16 sm:mt-0 sm:w-32" />
 							<footer className="row-start-3 mt-2 self-end">
-								<dl className="grid grid-cols-[max-content,auto] gap-2 sm:grid-cols-3">
+								<dl className="grid grid-cols-[max-content_auto] gap-2 sm:grid-cols-3">
 									<div className="max-sm:col-span-2 max-sm:grid max-sm:grid-cols-subgrid">
 										<dt className="text-sm font-semibold text-foreground">{t("price")}</dt>
 										<dd className="text-sm text-accent-foreground">
@@ -137,13 +140,34 @@ export default async function OrderDetailsPage({
 
 			<div className="pl-20 sm:pl-40">
 				<h2 className="sr-only">{t("detailsTitle")}</h2>
-
+				{isDigital(order.lines) && (
+					<div className="mb-8">
+						<h3 className="font-semibold leading-none text-neutral-700">Digital Asset</h3>
+						<ul className="mt-3">
+							{order.lines
+								.filter((line) => line.product.metadata.digitalAsset)
+								.map((line) => {
+									return (
+										<li key={line.product.id} className="text-sm">
+											<a
+												href={line.product.metadata.digitalAsset}
+												target="_blank"
+												download={true}
+												rel="noreferrer"
+												className="text-blue-500 hover:underline"
+											>
+												{line.product.name}
+											</a>
+										</li>
+									);
+								})}
+						</ul>
+					</div>
+				)}
 				<div className="grid gap-8 sm:grid-cols-2">
-					{order.order.shipping?.address && (
+					{!isDigital(order.lines) && order.order.shipping?.address && (
 						<div>
-							<h3 className="font-semibold leading-none text-neutral-700">
-								{t("shippingAddress")}
-							</h3>
+							<h3 className="font-semibold leading-none text-neutral-700">{t("shippingAddress")}</h3>
 							<p className="mt-3 text-sm">
 								{[
 									order.order.shipping.name,
@@ -179,8 +203,7 @@ export default async function OrderDetailsPage({
 									order.order.payment_method.billing_details.address.postal_code,
 									order.order.payment_method.billing_details.address.city,
 									order.order.payment_method.billing_details.address.state,
-									findMatchingCountry(order.order.payment_method?.billing_details?.address?.country)
-										?.label,
+									findMatchingCountry(order.order.payment_method?.billing_details?.address?.country)?.label,
 									"\n",
 									order.order.payment_method.billing_details.phone,
 									order.order.receipt_email,
@@ -205,9 +228,7 @@ export default async function OrderDetailsPage({
 									order.order.payment_method.card.brand in paymentMethods && (
 										<Image
 											src={
-												paymentMethods[
-													order.order.payment_method.card.brand as keyof typeof paymentMethods
-												]
+												paymentMethods[order.order.payment_method.card.brand as keyof typeof paymentMethods]
 											}
 											className="mr-1 inline-block w-6 align-text-bottom"
 											alt=""
